@@ -5,19 +5,32 @@ import requests
 import streamlit as st
 
 
+# # =========================================================
+# # INTERNAL DOCKER API
+# # =========================================================
+
+# API_URL = "http://backend:8000"
+
+# # =========================================================
+# # PUBLIC BROWSER URL
+# # =========================================================
+
+# PUBLIC_API_URL = "http://localhost:8000"
+
+import os
+
 # =========================================================
-# INTERNAL DOCKER API
+# PRODUCTION API URL
 # =========================================================
 
-API_URL = "http://backend:8000"
+BACKEND_URL = os.getenv(
+    "BACKEND_URL",
+    "https://audioex-backend.onrender.com"
+)
 
-# =========================================================
-# PUBLIC BROWSER URL
-# =========================================================
+API_URL = BACKEND_URL
 
-PUBLIC_API_URL = "http://localhost:8000"
-
-
+PUBLIC_API_URL = BACKEND_URL
 # =========================================================
 # SESSION STATE
 # =========================================================
