@@ -5,7 +5,17 @@ import requests
 import streamlit as st
 
 
-API_URL = "http://127.0.0.1:8000"
+# =========================================================
+# INTERNAL DOCKER API
+# =========================================================
+
+API_URL = "http://backend:8000"
+
+# =========================================================
+# PUBLIC BROWSER URL
+# =========================================================
+
+PUBLIC_API_URL = "http://localhost:8000"
 
 
 # =========================================================
@@ -74,7 +84,9 @@ and intelligently converts it into your preferred format.
 - High-quality Opus/WebM extraction
 - MP3 / FLAC / WAV / Opus conversion
 - Embedded metadata & thumbnails
-- Playlist batch processing (UNDER CONSTRUCTION YET!)
+- Session-safe processing
+- Temporary auto cleanup
+- Playlist batch processing (UNDER DEVELOPMENT)
 """
 )
 
@@ -173,7 +185,7 @@ with single_tab:
         try:
 
             # =================================================
-            # FETCH METADATA
+            # METADATA
             # =================================================
 
             metadata_response = requests.get(
@@ -371,7 +383,7 @@ with single_tab:
             ):
 
                 download_url = (
-                    API_URL
+                    PUBLIC_API_URL
                     + final_result[
                         "download_url"
                     ]
@@ -416,11 +428,12 @@ with playlist_tab:
 Paste a YouTube playlist URL.
 
 Audio EX will:
-- Currently under Dev : Not Ready Yet, Stay Tuned! (But you can test it if you want, just expect some hiccups)
 - Process videos individually
-- Skip broken videos safely if needed
+- Skip broken videos safely
 - Continue conversion automatically
 - Stream downloadable outputs
+
+Playlist engine is still under active development.
 """
     )
 
@@ -484,10 +497,6 @@ Audio EX will:
             overall_progress = st.progress(0)
 
             status_box = st.empty()
-
-            # =================================================
-            # PLAYLIST LOOP
-            # =================================================
 
             for idx, entry in enumerate(entries):
 
@@ -599,10 +608,6 @@ Audio EX will:
 
             status_box.empty()
 
-            # =================================================
-            # RESULTS
-            # =================================================
-
             st.success(
                 f"Processed "
                 f"{len(downloaded)} tracks"
@@ -623,7 +628,7 @@ Audio EX will:
                     )
 
                     download_url = (
-                        API_URL
+                        PUBLIC_API_URL
                         + item[
                             "download_url"
                         ]
@@ -635,10 +640,6 @@ Audio EX will:
                         key=f"dl_{idx}",
                         use_container_width=True
                     )
-
-            # =================================================
-            # SKIPPED
-            # =================================================
 
             if skipped:
 

@@ -1,0 +1,36 @@
+services:
+
+  backend:
+
+    build: .
+
+    container_name: audioex_backend
+
+    command: python run.py
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - .:/app
+
+    restart: unless-stopped
+
+  frontend:
+
+    build: .
+
+    container_name: audioex_frontend
+
+    command: streamlit run frontend/streamlit_app.py --server.address 0.0.0.0
+
+    ports:
+      - "8501:8501"
+
+    volumes:
+      - .:/app
+
+    depends_on:
+      - backend
+
+    restart: unless-stopped
